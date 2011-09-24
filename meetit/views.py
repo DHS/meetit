@@ -23,23 +23,24 @@ def signup(request):
         signupForm = SignupForm()
 
     if data:
-        return events(request, origin, data)
+		return events(request, origin, data)
     else:
         return render_to_response('base_signup.html', locals())
 
 def events(request, origin, events):
-    cal = Calendar()
-    for event in events:
-        departure_time, arrival_time = journey(origin, event['location'], event['start'])
-        ev = Event()
-        ev.add('dtstart', departure_time)
-        ev.add('dtend', arrival_time)
-        ev.add('summary', "%s Journey" % event['name'])
-        cal.add_component(ev)
-
-    cal_display = cal.as_string()
-
-
-    return render_to_response('base_events.html', locals())
+	cal = Calendar()
+	for event in events:
+		try:
+			departure_time, arrival_time = journey(origin, event['location'], event['start'])
+		except TypeError:
+			pass
+		else:
+			ev = Event()
+			ev.add('dtstart', departure_time)
+			ev.add('dtend', arrival_time)
+			ev.add('summary', "%s Journey" % event['name'])
+			cal.add_component(ev)
+	cal_display = cal.as_string()
+	return render_to_response('base_events.html', locals())
 
 
