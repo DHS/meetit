@@ -7,13 +7,18 @@
 {% block content %}
 <p>your events</p>
 
-{% for event in data %}
-<p>{{event.name}} - {{event.start|date:"D d M Y - H:i"}}<br>at {{event.location}}</p>
-{% endfor %}
+<form action='/journeys/' method="post">
 
-<p>your new events</p>
+    {{ eventForm }}
+    {% for event in events %}
+        <p><input type="checkbox" name="cb_{{forloop.counter}}"></input>{{event.name}} - {{event.start|date:"D d M Y - H:i"}}<br>at {{event.location}}</p>
+    {% endfor %}
 
-<pre>{{ cal_display }}</pre>
+    <input type='hidden' name='origin' value='{{origin}}'>
+    <input type='hidden' name='events' value='{{events}}'>
+
+    <input type='submit' name='plan' value="plan your journey!">
+</form>
 
 {% endblock %}
 
