@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block title%}
+- Events
+{% endblock%}
+
+{% block content %}
+<p>your events</p>
+
+{% for event in data %}
+<p>{{event.name}} - {{event.start|date:"D d M Y - H:i"}}<br>at {{event.location}}</p>
+{% endfor %}
+
+{% endblock %}
+
+
+

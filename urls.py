@@ -6,7 +6,10 @@ from django.conf.urls.defaults import *
 
 urlpatterns = patterns('',
     # Examples:
+    url(r'events/', 'meetit.views.events', name='events'),
+
     url(r'^$', 'meetit.views.signup', name='signup'),
+
     # url(r'^meetit/', include('meetit.foo.urls')),
 
     # Uncomment the admin/doc line below to enable admin documentation:
