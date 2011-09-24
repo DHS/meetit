@@ -7,25 +7,26 @@ from icalendar import Calendar, Event
 
 @csrf_exempt
 def signup(request):
-    data = False
+	data = False
 
-    if request.POST and 'signup' in request.POST:
-        signupForm = SignupForm(request.POST)
-        if signupForm.is_valid():
-            #do shit
-            signupCD = signupForm.cleaned_data
-            data = parse_cal(signupCD['url'])
-            origin = signupCD['postcode']
-        else:
-            #show errors
-            pass
-    else:
-        signupForm = SignupForm()
+	if request.POST and 'signup' in request.POST:
+		signupForm = SignupForm(request.POST)
+		if signupForm.is_valid():
+			#do shit
+			signupCD = signupForm.cleaned_data
+			data = parse_cal(signupCD['url'])
+			if
+			origin = signupCD['postcode']
+		else:
+			#show errors
+			pass
+	else:
+		signupForm = SignupForm()
 
-    if data:
+	if data:
 		return events(request, origin, data)
-    else:
-        return render_to_response('base_signup.html', locals())
+	else:
+		return render_to_response('base_signup.html', locals())
 
 def events(request, origin, events):
 	cal = Calendar()
