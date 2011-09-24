@@ -1,5 +1,5 @@
 from django.shortcuts import render_to_response
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from meetit.forms import SignupForm
 from meetit.calendar import parse_cal
 from meetit.directions import journey
@@ -62,8 +62,8 @@ def journeys(request):
         # if not empty
         if cal.subcomponents:
 
-            calfilename = 'calfile/meetit-%s.ics' % int(time.time())
-            calfile = os.path.join(settings.MEDIA_ROOT, calfilename)
+            calfilename = 'meetit-%s.ics' % int(time.time())
+            calfile = os.path.join(settings.MEDIA_ROOT, 'calfile/', calfilename)
 
             f = open(calfile, 'wb')
             f.write(cal.as_string())
@@ -77,3 +77,12 @@ def journeys(request):
     else:
         return HttpResponseRedirect('/')
 
+
+def download(request, filename):
+    try:
+        calfile = os.path.join(settings.MEDIA_ROOT, 'calfile/', filename)
+        response = HttpResponse(mimetype='application/force-download')
+        response['Content-Disposition'] = 'attachment; filename=%s' % calfile
+        return response
+    except:
+        return HttpResponse('fail :(')
