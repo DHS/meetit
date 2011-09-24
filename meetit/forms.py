@@ -1,6 +1,6 @@
 from django import forms
 
 class SignupForm(forms.Form):
-    url = forms.URLField(verify_exists=True)
+    url = forms.CharField(max_length=200)
     postcode = forms.CharField(max_length=10)
 

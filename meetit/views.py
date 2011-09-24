@@ -14,7 +14,10 @@ def signup(request):
 		if signupForm.is_valid():
 			#do shit
 			signupCD = signupForm.cleaned_data
-			data = parse_cal(signupCD['url'])
+			url = signupCD['url']
+			if url[0:9] == 'webcal://':
+				url = 'http' + url[6:]
+			data = parse_cal(url)
 			origin = signupCD['postcode']
 		else:
 			#show errors
