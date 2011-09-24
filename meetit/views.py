@@ -15,7 +15,6 @@ def signup(request):
 			#do shit
 			signupCD = signupForm.cleaned_data
 			data = parse_cal(signupCD['url'])
-			if
 			origin = signupCD['postcode']
 		else:
 			#show errors
