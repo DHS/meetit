@@ -62,8 +62,8 @@ def journeys(request):
         # if not empty
         if cal.subcomponents:
 
-            calfilename = 'meetit-%s.ics' % int(time.time())
-            calfile = os.path.join(settings.MEDIA_ROOT, 'calfile/', calfilename)
+            calfilename = 'calfile/meetit-%s.ics' % int(time.time())
+            calfile = os.path.join(settings.MEDIA_ROOT, calfilename)
 
             f = open(calfile, 'wb')
             f.write(cal.as_string())
@@ -76,13 +76,3 @@ def journeys(request):
 
     else:
         return HttpResponseRedirect('/')
-
-
-def download(request, filename):
-    try:
-        calfile = os.path.join(settings.MEDIA_ROOT, 'calfile/', filename)
-        response = HttpResponse(mimetype='application/force-download')
-        response['Content-Disposition'] = 'attachment; filename=%s' % calfile
-        return response
-    except:
-        return HttpResponse('fail :(')

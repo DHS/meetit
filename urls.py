@@ -8,7 +8,6 @@ from django.conf import settings
 urlpatterns = patterns('',
     url(r'events/', 'meetit.views.events', name='events'),
     url(r'journeys/', 'meetit.views.journeys', name='journeys'),
-    url(r'download/cal/(?P<filename>.*)/$', 'meetit.views.download', name='download'),
     url(r'^$', 'meetit.views.signup', name='signup'),
 
     # url(r'^admin/', include(admin.site.urls)),
