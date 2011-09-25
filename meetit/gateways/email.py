@@ -64,7 +64,7 @@ def soap_request():
 
         ev_list.append(dictionary)
 
-    data = {'email': email, 'events': ev_list, 'remaining': remaining}
+    data = {'email': email if email else '', 'events': ev_list, 'remaining': remaining}
 
     print data
 

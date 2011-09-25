@@ -42,7 +42,8 @@ def make_dict(ev):
 def create_journey(origin, event):
     try:
         departure_time, arrival_time = journey(origin, event['location'], event['start'])
-    except TypeError:
+    except TypeError, e:
+        print 'wtf2 ', e
         return False
     else:
         ev_name = "%s Journey" % event['name']
