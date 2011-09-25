@@ -2,16 +2,18 @@ from icalendar import Calendar, Event
 from meetit.directions import journey
 import urllib
 import pytz
+import datetime
 from dateutil.parser import *
 from django.conf import settings
 
 
 def parse_cal(url):
     data = urllib.urlopen(url).read()
-
     cal = Calendar.from_string(data)
     
-    events = [ make_dict(ev) for ev in cal.subcomponents]
+    an_hour_ago = to_local(datetime.datetime.now() - datetime.timedelta(hours=1))
+
+    events = [ make_dict(ev) for ev in cal.subcomponents if to_local(parse(str(ev['dtstart']))) >= an_hour_ago]
     
     return events
 
