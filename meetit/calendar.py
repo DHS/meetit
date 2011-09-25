@@ -13,7 +13,12 @@ def parse_cal(url):
     
     an_hour_ago = to_local(datetime.datetime.now() - datetime.timedelta(hours=1))
 
-    events = [ make_dict(ev) for ev in cal.subcomponents if to_local(parse(str(ev['dtstart']))) >= an_hour_ago]
+    events = []
+    for ev in cal.walk():
+        if ev.name == 'VEVENT':
+            start = to_local(parse(str(ev['dtstart'])))
+            if start.time() and start >= an_hour_ago and ev['LOCATION']:
+                events.append(make_dict(ev))
     
     return events
 
@@ -35,11 +40,15 @@ def make_dict(ev):
     return ev_dict
 
 def create_journey(origin, event):
-    departure_time, arrival_time = journey(origin, event['location'], event['start'])
-    ev_name = "%s Journey" % event['name']
-    ev = Event()
-    ev.add('dtstart', departure_time)
-    ev.add('dtend', arrival_time)
-    ev.add('summary', ev_name)
+    try:
+        departure_time, arrival_time = journey(origin, event['location'], event['start'])
+    except TypeError:
+        return False
+    else:
+        ev_name = "%s Journey" % event['name']
+        ev = Event()
+        ev.add('dtstart', departure_time)
+        ev.add('dtend', arrival_time)
+        ev.add('summary', ev_name)
 
-    return ev
+        return ev

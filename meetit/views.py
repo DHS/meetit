@@ -52,9 +52,9 @@ def journeys(request):
         for i, event in enumerate(events):
             if request.POST.get('cb_%s' % str(i+1)):
                 ev = create_journey(origin, event)
-                cal.add_component(ev)
-
-                new_events.append({'departure': to_local(parse(str(ev['dtstart']))), 'arrival': to_local(parse(str(ev['dtend']))), 'name': ev['summary']})
+                if ev: 
+                    cal.add_component(ev)
+                    new_events.append({'departure': to_local(parse(str(ev['dtstart']))), 'arrival': to_local(parse(str(ev['dtend']))), 'name': ev['summary']})
 
         # if not empty
         if cal.subcomponents:

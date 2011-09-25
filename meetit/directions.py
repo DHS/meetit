@@ -9,7 +9,8 @@ def journey(origin, destination, start_time):
 	json_data = simplejson.load(data)
 
 	if json_data['status'] != 'OK':
-		return False
+		print json_data['status']
+        return False
 		
 	journey_length = datetime.timedelta(seconds = json_data['routes'][0]['legs'][0]['duration']['value'])
 
