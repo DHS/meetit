@@ -54,6 +54,7 @@ def soap_request():
     events = xmldoc.getElementsByTagName("a:EventInfo")
 
     ev_list = []
+    email = 'bruno@bruno.bruno'
     for event in events:
         email = smart_str(event.getElementsByTagName('a:Email')[0].childNodes[0].data),
         dictionary = {
@@ -64,7 +65,7 @@ def soap_request():
 
         ev_list.append(dictionary)
 
-    data = {'email': email if email else '', 'events': ev_list, 'remaining': remaining}
+    data = {'email': email, 'events': ev_list, 'remaining': remaining}
 
     print data
 
