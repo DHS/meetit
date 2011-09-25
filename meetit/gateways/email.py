@@ -1,6 +1,7 @@
 import httplib
 import datetime
 from xml.dom import minidom
+from django.utils.encoding import smart_str
 
 def generate_soap(email, cal, title):
     SOAP_TEMPLATE = """<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/">
@@ -16,9 +17,7 @@ def generate_soap(email, cal, title):
 
     soap_message = SOAP_TEMPLATE % (email, title, cal.as_string())
 
-    print soap_message
-
-    #construct and send the header
+    # print soap_message
 
     webservice = httplib.HTTPConnection("calservice.apphb.com")
     webservice.putrequest("POST", "/CalendarService.svc")
@@ -28,21 +27,14 @@ def generate_soap(email, cal, title):
     webservice.endheaders()
     webservice.send(soap_message)
 
-    # get the response
-
-    resp = webservice.getresponse()
-    print resp.read()
-    # statuscode, statusmessage, header = webservice.getreply()
-    # print "Response: ", statuscode, statusmessage
-    # print "headers: ", header
-    # res = webservice.getfile().read()
-    # print res
+    # resp = webservice.getresponse()
+    # print resp.read()
 
 def soap_request():
     message =  """<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/">
     <s:Body>
     <GetData xmlns="http://tempuri.org/">
-    <value>0</value>    
+    <value>0</value>
     </GetData>
     </s:Body>
     </s:Envelope>"""
@@ -55,42 +47,51 @@ def soap_request():
     webservice.endheaders()
     webservice.send(message)
 
-    # resp = webservice.getresponse()
-    # print resp.read()
-
-    # get the response
-
     resp = webservice.getresponse()
     xmldoc = minidom.parseString(resp.read())
-    node = xmldoc.documentElement
+    remaining = xmldoc.getElementsByTagName("a:NumOfRemMails")[0].childNodes[0].data
     events = xmldoc.getElementsByTagName("a:EventInfo")
+
+    ev_list = []
+    for event in events:
+        dictionary = {
+            'name': smart_str(event.getElementsByTagName('a:Name')[0].childNodes[0].data),
+            'start': event.getElementsByTagName('a:Start')[0].childNodes[0].data,
+            'location': smart_str(event.getElementsByTagName('a:Location')[0].childNodes[0].data)
+        }
+
+        ev_list.append(dictionary)
+
+    data = {'email': event.getElementsByTagName('a:Email')[0].childNodes[0].data, 'events': ev_list, 'remaining': remaining}
+
+    print data
+
+    return data
 
     #TODO: read the events and return {'email': useremail, 'events': [{'name': eventname, 'start': startdatetime, 'location': eventlocation}]}
 
     #test return
-    data = {
-            'email': 'bruno.panara+test@gmail.com', 
-            'events': [
-                    {
-                        'name': 'my test event',
-                        'start': datetime.datetime.now()+datetime.timedelta(days=1, hours=2, minutes=23),
-                        'location': 'Buckingham Palace, London, UK'
-                    },
-                    {
-                        'name': 'my second test event',
-                        'start': datetime.datetime.now()+datetime.timedelta(days=2, hours=12, minutes=38),
-                        'location': 'Edinburgh Castle, Edinburgh, UK'
-                    },
-                    {
-                        'name': 'my third and last test event',
-                        'start': datetime.datetime.now()+datetime.timedelta(days=1, hours=13, minutes=12),
-                        'location': 'piccadilly station, manchester, uk'
-                    }
-                ]
-            }
+    # data = {
+    #         'email': 'bruno.panara+test@gmail.com', 
+    #         'events': [
+    #                 {
+    #                     'name': 'my test event',
+    #                     'start': datetime.datetime.now()+datetime.timedelta(days=1, hours=2, minutes=23),
+    #                     'location': 'Buckingham Palace, London, UK'
+    #                 },
+    #                 {
+    #                     'name': 'my second test event',
+    #                     'start': datetime.datetime.now()+datetime.timedelta(days=2, hours=12, minutes=38),
+    #                     'location': 'Edinburgh Castle, Edinburgh, UK'
+    #                 },
+    #                 {
+    #                     'name': 'my third and last test event',
+    #                     'start': datetime.datetime.now()+datetime.timedelta(days=1, hours=13, minutes=12),
+    #                     'location': 'piccadilly station, manchester, uk'
+    #                 }
+    #             ]
+    #         }
 
-    print resp.read()
-
-    return data
+    # return data
 
 
