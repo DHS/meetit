@@ -1,10 +1,11 @@
 from django.shortcuts import render_to_response
 from django.http import HttpResponseRedirect, HttpResponse
 from meetit.forms import SignupForm
-from meetit.calendar import parse_cal
+from meetit.calendar import *
 from meetit.directions import journey
 from django.views.decorators.csrf import csrf_exempt
 from icalendar import Calendar, Event
+from dateutil.parser import *
 import os
 import time
 import datetime
@@ -37,27 +38,23 @@ def signup(request):
 
 @csrf_exempt
 def events(request, origin, events):
-
+    request.session['origin'] = origin
+    request.session['events'] = events
     return render_to_response('base_events.html', locals())
 
 @csrf_exempt
 def journeys(request):
     new_events = []
     if request.POST and 'plan' in request.POST:
-        origin = str(request.POST['origin'])
-        events = eval(str(request.POST['events']))
+        origin = request.session.pop('origin')
+        events = request.session.pop('events')
         cal = Calendar()
         for i, event in enumerate(events):
             if request.POST.get('cb_%s' % str(i+1)):
-                departure_time, arrival_time = journey(origin, event['location'], event['start'])
-                ev_name = "%s Journey" % event['name']
-                ev = Event()
-                ev.add('dtstart', departure_time)
-                ev.add('dtend', arrival_time)
-                ev.add('summary', ev_name)
+                ev = create_journey(origin, event)
                 cal.add_component(ev)
 
-                new_events.append({'departure': departure_time, 'arrival': arrival_time, 'name': ev_name})
+                new_events.append({'departure': to_local(parse(str(ev['dtstart']))), 'arrival': to_local(parse(str(ev['dtend']))), 'name': ev['summary']})
 
         # if not empty
         if cal.subcomponents:

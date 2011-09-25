@@ -109,10 +109,12 @@ TEMPLATE_DIRS = (
 		os.path.join(PROJECT_ROOT, 'templates/'),
 )
 
+SESSION_ENGINE = "django.contrib.sessions.backends.file"
+
 INSTALLED_APPS = (
     'django.contrib.auth',
     'django.contrib.contenttypes',
-    'django.contrib.sessions',
+    # 'django.contrib.sessions',
     'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
