@@ -1,5 +1,5 @@
 from icalendar import Calendar, Event
-from meetit.directions import journey
+from meetit.meetit.directions import journey
 import urllib
 import pytz
 import datetime

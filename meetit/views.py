@@ -1,9 +1,9 @@
 from django.shortcuts import render_to_response
 from django.http import HttpResponseRedirect, HttpResponse
-from meetit.forms import SignupForm, OriginForm
-from meetit.calendar import *
-from meetit.directions import journey
-from meetit.gateways.email import generate_soap, soap_request
+from meetit.meetit.forms import SignupForm, OriginForm
+from meetit.meetit.calendar import *
+from meetit.meetit.directions import journey
+from meetit.meetit.gateways.email import generate_soap, soap_request
 from django.views.decorators.csrf import csrf_exempt
 from icalendar import Calendar, Event
 from dateutil.parser import *
