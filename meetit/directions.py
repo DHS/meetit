@@ -9,6 +9,7 @@ def journey(origin, destination, start_time):
     json_data = simplejson.load(data)
     
     if json_data['status'] != 'OK':
+        print 'wtf'
         print json_data['status']
         return False
     
