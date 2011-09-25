@@ -17,7 +17,7 @@ def generate_soap(email, cal, title):
 
     soap_message = SOAP_TEMPLATE % (email, title, cal.as_string())
 
-    # print soap_message
+    print soap_message
 
     webservice = httplib.HTTPConnection("calservice.apphb.com")
     webservice.putrequest("POST", "/CalendarService.svc")
@@ -27,8 +27,9 @@ def generate_soap(email, cal, title):
     webservice.endheaders()
     webservice.send(soap_message)
 
-    # resp = webservice.getresponse()
-    # print resp.read()
+    resp = webservice.getresponse()
+    print resp.read()
+    # print xmldoc.getElementsByTagName("a:")
 
 def soap_request():
     message =  """<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/">
@@ -49,11 +50,12 @@ def soap_request():
 
     resp = webservice.getresponse()
     xmldoc = minidom.parseString(resp.read())
-    remaining = xmldoc.getElementsByTagName("a:NumOfRemMails")[0].childNodes[0].data
+    remaining = 0#xmldoc.getElementsByTagName("a:NumOfRemMails")[0].childNodes[0].data
     events = xmldoc.getElementsByTagName("a:EventInfo")
 
     ev_list = []
     for event in events:
+        email = smart_str(event.getElementsByTagName('a:Email')[0].childNodes[0].data),
         dictionary = {
             'name': smart_str(event.getElementsByTagName('a:Name')[0].childNodes[0].data),
             'start': event.getElementsByTagName('a:Start')[0].childNodes[0].data,
@@ -62,7 +64,7 @@ def soap_request():
 
         ev_list.append(dictionary)
 
-    data = {'email': event.getElementsByTagName('a:Email')[0].childNodes[0].data, 'events': ev_list, 'remaining': remaining}
+    data = {'email': email, 'events': ev_list, 'remaining': remaining}
 
     print data
 

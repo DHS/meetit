@@ -6,10 +6,11 @@ from django.conf import settings
 # admin.autodiscover()
 
 urlpatterns = patterns('',
-    url(r'events/', 'meetit.meetit.views.events', name='events'),
-    url(r'email/', 'meetit.meetit.views.email', name='email'),
-    url(r'journeys/', 'meetit.meetit.views.journeys', name='journeys'),
-    url(r'^$', 'meetit.meetit.views.signup', name='signup'),
+    url(r'demo/', 'meetit.views.demo', name='demo'),
+    url(r'events/', 'meetit.views.events', name='events'),
+    url(r'email/', 'meetit.views.email', name='email'),
+    url(r'journeys/', 'meetit.views.journeys', name='journeys'),
+    url(r'^$', 'meetit.views.signup', name='signup'),
 
     # url(r'^admin/', include(admin.site.urls)),
 )

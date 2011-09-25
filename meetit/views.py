@@ -1,9 +1,9 @@
 from django.shortcuts import render_to_response
 from django.http import HttpResponseRedirect, HttpResponse
-from meetit.meetit.forms import SignupForm, OriginForm
-from meetit.meetit.calendar import *
-from meetit.meetit.directions import journey
-from meetit.meetit.gateways.email import generate_soap, soap_request
+from meetit.forms import SignupForm, OriginForm
+from meetit.calendar import *
+from meetit.directions import journey
+from meetit.gateways.email import generate_soap, soap_request
 from django.views.decorators.csrf import csrf_exempt
 from icalendar import Calendar, Event
 from dateutil.parser import *
@@ -121,3 +121,33 @@ def email(request):
         originForm = OriginForm()
 
     return render_to_response('base_email.html', locals())
+
+
+def demo(request):
+
+    data = soap_request()
+    print 'data ok'
+    new_events = []
+
+    cal = Calendar()
+
+    for event in data['events']:
+        ev = create_journey('NW3 5TN', event)
+        print ev
+        if ev: 
+            cal.add_component(ev)
+            new_events.append({'departure': to_local(parse(str(ev['dtstart']))), 'arrival': to_local(parse(str(ev['dtend']))), 'name': ev['summary']})
+        
+    print new_events
+    print 'emailing'
+    evs = len(new_events)
+    if evs:
+        title = "%s events" % evs if evs >= 2 else new_events[0]['name']
+    else:
+        return HttpResponse('fail')
+
+    print title
+    generate_soap(data['email'], cal, title)
+    print 'emailed'
+
+    return HttpResponse('fingers crossed')
