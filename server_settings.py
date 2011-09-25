@@ -4,7 +4,7 @@ import os
 LOCAL = False
 LOCAL_DEVELOPMENT = False
 
-DEBUG = False
+DEBUG = True
 THUMBNAIL_DEBUG = False
 
 SITE_ROOT = 'inmycal.com'
