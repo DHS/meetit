@@ -3,6 +3,7 @@ from django.http import HttpResponseRedirect, HttpResponse
 from meetit.forms import SignupForm
 from meetit.calendar import *
 from meetit.directions import journey
+from meetit.gateways.email import generate_soap
 from django.views.decorators.csrf import csrf_exempt
 from icalendar import Calendar, Event
 from dateutil.parser import *
@@ -59,12 +60,21 @@ def journeys(request):
         # if not empty
         if cal.subcomponents:
 
-            calfilename = 'calfile/meetit-%s.ics' % int(time.time())
-            calfile = os.path.join(settings.MEDIA_ROOT, calfilename)
+            if request.POST.get('email'):
+                address = request.POST.get('email_address')
+                evs = len(new_events)
+                title = "%s events" % evs if evs >= 2 else new_events[0]['name']
+                generate_soap(address, cal, title)
 
-            f = open(calfile, 'wb')
-            f.write(cal.as_string())
-            f.close()
+                return HttpResponse('Email sent!')
+
+            else:
+                calfilename = 'calfile/meetit-%s.ics' % int(time.time())
+                calfile = os.path.join(settings.MEDIA_ROOT, calfilename)
+
+                f = open(calfile, 'wb')
+                f.write(cal.as_string())
+                f.close()
 
         else:
             cal_display = "no events!"
