@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block title%}
+- Email Response
+{% endblock%}
+
+{% block content %}
+
+{% if new_events %}
+    <p>your events</p>
+
+    {% for event in data.events %}
+        <p>{{event.name}} - {{event.start|date:"D d M Y - H:i"}}<br>at {{event.location}}</p>
+    {% endfor %}
+
+    <p>your new events</p>
+    {% for event in new_events %}
+        <p>{{event.name}}: {{event.departure|date:"D d, H:i"}} - {{event.arrival|date:"D d, H:i"}}</p>
+    {% endfor %}
+
+    {% endif %}
+
+    {{ message }}
+
+{% endblock %}
+
+
+
+

@@ -1,9 +1,9 @@
 from django.shortcuts import render_to_response
 from django.http import HttpResponseRedirect, HttpResponse
-from meetit.forms import SignupForm
+from meetit.forms import SignupForm, OriginForm
 from meetit.calendar import *
 from meetit.directions import journey
-from meetit.gateways.email import generate_soap
+from meetit.gateways.email import generate_soap, soap_request
 from django.views.decorators.csrf import csrf_exempt
 from icalendar import Calendar, Event
 from dateutil.parser import *
@@ -83,3 +83,41 @@ def journeys(request):
 
     else:
         return HttpResponseRedirect('/')
+
+@csrf_exempt
+def email(request):
+
+    if request.POST and 'origin' in request.POST:
+        new_events = []
+        originForm = OriginForm(request.POST)
+        if originForm.is_valid():
+            origin_CD = originForm.cleaned_data
+            origin = origin_CD['origin']
+
+            data = soap_request()
+
+            cal = Calendar()
+
+            for event in data['events']:
+                ev = create_journey(origin, event)
+                if ev: 
+                    cal.add_component(ev)
+                    new_events.append({'departure': to_local(parse(str(ev['dtstart']))), 'arrival': to_local(parse(str(ev['dtend']))), 'name': ev['summary']})
+                
+            if cal.subcomponents:
+                evs = len(new_events)
+                title = "%s events" % evs if evs >= 2 else new_events[0]['name']
+
+                generate_soap(data['email'], cal, title)
+
+                message = "email successfully sent"
+
+            else:
+                message = "no events found"
+
+            return render_to_response('base_email_response.html', locals())
+
+    else:
+        originForm = OriginForm()
+
+    return render_to_response('base_email.html', locals())

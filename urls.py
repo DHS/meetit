@@ -7,6 +7,7 @@ from django.conf import settings
 
 urlpatterns = patterns('',
     url(r'events/', 'meetit.views.events', name='events'),
+    url(r'email/', 'meetit.views.email', name='email'),
     url(r'journeys/', 'meetit.views.journeys', name='journeys'),
     url(r'^$', 'meetit.views.signup', name='signup'),
 

@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block title%}
+- Email
+{% endblock%}
+
+{% block content %}
+<p>Where's home?</p>
+
+<form method='post'>
+    {{ originForm.as_p }}
+    <input type='submit' name='email' value='check email for events'>
+</form>
+
+{% endblock %}
+
+
+
