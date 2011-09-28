@@ -3,7 +3,7 @@ from django.db import models
 # Create your models here.
 class User(models.Model):
     email = models.CharField(max_length=200)
-    origin = models.CharField(max_lenght=200)
+    origin = models.CharField(max_length=200)
 
 class Calendar(models.Model):
     url = models.URLField(max_length=200)

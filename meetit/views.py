@@ -1,6 +1,7 @@
 from django.shortcuts import render_to_response
 from django.http import HttpResponseRedirect, HttpResponse
 from meetit.meetit.forms import SignupForm, OriginForm
+from meetit.meetit.models import *
 from meetit.meetit.calendar import *
 from meetit.meetit.directions import journey
 from meetit.meetit.gateways.email import generate_soap, soap_request
@@ -11,6 +12,18 @@ import os
 import time
 import datetime
 from django.conf import settings
+
+@csrf_exempt
+def home(request):
+	if request.POST and 'submit' in request.POST:
+		email = request.POST.get('email')
+		origin = request.POST.get('origin')
+		User.objects.create(email=email, origin=origin)
+	
+		return HttpResponseRedirect('confirm/')
+
+
+	return render_to_response('base_home.html', locals())
 
 @csrf_exempt
 def signup(request):
@@ -121,3 +134,22 @@ def email(request):
         originForm = OriginForm()
 
     return render_to_response('base_email.html', locals())
+
+def demo(request):
+	data = soap_request()
+        cal = Calendar()
+	new_events = []
+
+        for event in data['events']:
+            ev = create_journey('NW3 5TN', event)
+            if ev: 
+                cal.add_component(ev)
+                new_events.append({'departure': to_local(parse(str(ev['dtstart']))), 'arrival': to_local(parse(str(ev['dtend']))), 'name': ev['summary']})
+                
+        if cal.subcomponents:
+            evs = len(new_events)
+            title = "%s events" % evs if evs >= 2 else new_events[0]['name']
+
+            generate_soap(data['email'], cal, title)
+	
+	return HttpResponse('fingers crossed')
