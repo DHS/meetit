@@ -29,7 +29,6 @@ def generate_soap(email, cal, title):
 
     resp = webservice.getresponse()
     print resp.read()
-    # print xmldoc.getElementsByTagName("a:")
 
 def soap_request():
     message =  """<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/">
@@ -54,7 +53,6 @@ def soap_request():
     events = xmldoc.getElementsByTagName("a:EventInfo")
 
     ev_list = []
-    email = 'bruno@bruno.bruno'
     for event in events:
         email = smart_str(event.getElementsByTagName('a:Email')[0].childNodes[0].data),
         dictionary = {

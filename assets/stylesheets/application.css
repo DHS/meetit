@@ -1,0 +1,93 @@
+/*
+ * This is a manifest file that'll automatically include all the stylesheets available in this directory
+ * and any sub-directories. You're free to add application-wide styles to this file and they'll appear at
+ * the top of the compiled file, but it's generally better to create a new file per style scope.
+ *= require_self
+ *= require_tree . 
+*/
+::-webkit-input-placeholder {
+  color: white;
+	font-size: 0.9em;
+	font-weight: lighter;
+}
+body{
+	background-image: url(/assets/images/linen.jpg);
+	text-align: center;
+	font-size: 14px;
+	font-family: "Helvetica";
+	font-weight: lighter;
+	color: white;
+	padding: 0;
+}
+input[type=text]{
+	height: 25px;
+	color: white;
+	font-size: 1.2em;
+	width: 100%;
+	padding: 2px 4px;
+	background-image: url(/assets/images/transparent-white.png);
+	background-color: transparent;
+	border: 0;
+	margin: 10px 0;
+}
+#main_logo{
+	position: absolute;
+	top: 20px;
+	left: 10px;
+}
+#container{
+	text-align: left;
+	margin:	0px auto;
+	width: 97%;
+	width: 960px;
+	position: relative;
+	margin-top: 0;
+	border: 1px solid transparent;
+	z-index: 2;
+}
+#works_with{
+	position: absolute;
+	top: -30px;
+	right: -10px;
+	z-index: 1;
+}
+#front_form_container{
+	text-align: center;
+}
+#front_form{
+	text-align: left;
+	margin: 0 auto;
+	width: 450px;
+	margin-top: 43px;
+}
+.element{
+	margin: 5px 5px;
+}
+#front_button{
+	float: right;
+}
+#front_form_container h1 span{
+	display: none;
+}
+#front_form_container h1{
+	width: 288px;
+	height: 17px;
+	background-image: url(/assets/images/connect-to-anysite.png);
+	margin-bottom: 0;
+	margin-left: 5px;
+}
+#google_connect{
+	margin-top: 10px;
+	margin-left: 90px;
+}
+#demo_image{
+	margin-top: -15px;
+	margin-left: -10px;
+}
+#confirm{
+	margin: 10px auto;
+	width: 714px;
+	height: 514px;
+	margin-left: 150px;
+	margin-top: 70px;
+}

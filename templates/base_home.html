@@ -1,0 +1,24 @@
+{% extends 'base.html'%}
+
+{% block content %}
+<div id="front_form_container">
+  <form id="front_form" method="post">
+    <h1><span>Sign up now using any calendar</span></h1>
+
+    <div class="element">
+      <input type="text" name="email", placeholder="enter your email" />
+    </div>
+  
+    <div class="element">
+      <input type="text" name="origin", placeholder="enter your home address" /><br> 
+        <input type="image" src="/assets/images/front-button.png" value="Submit" alt="Submit" id="front_button">
+      (you can always change this later)
+    </div>
+  
+
+    <input type="image" src="/assets/images/connect-to-google.png" name="submit" value="Submit" alt="Submit" id="google_connect">
+  </form>
+  
+  <img src="/assets/images/demo-image.png" id="demo_image">
+</div>
+{%endblock%}
