@@ -15,7 +15,7 @@ def generate_soap(email, cal, title):
     </s:Body>
     </s:Envelope>"""
 
-    soap_message = SOAP_TEMPLATE % (email, title, cal.as_string())
+    soap_message = SOAP_TEMPLATE % (email[0], title, cal.as_string())
 
     print soap_message
 
